@@ -10,6 +10,8 @@ not_external = ['wa.me','facebook.com', 'www.facebook.com','instagram.com','vk.c
 
 def valid_url(url):
     parsed = urlparse(url)
+    if parsed.scheme in ['skype','tel']:
+        return False
     return bool(parsed.netloc) and bool(parsed.scheme)
 
 def website_links(url):
@@ -29,7 +31,7 @@ def website_links(url):
         if not valid_url(href) or href in int_url:
             continue
 
-        if href[-3:].lower() in ['jpg','png','gif','avi','mov']:
+        if href[-3:].lower() in ['jpg','png','gif','avi','mov','peg']:
             continue
 
         if domain_name not in href:
@@ -60,7 +62,7 @@ def crawl(url, max_urls=50000):
 
 
 if __name__ == "__main__":
-    crawl("https://medestetik.ru")
+    crawl("http://dublikatnomera.com")
     print("[+] Total External links:", len(ext_url))
     print("[+] Total Internal links:", len(int_url))
     print("[+] Total:", len(ext_url) + len(int_url))
