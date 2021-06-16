@@ -3,13 +3,18 @@ import os
 from urllib.parse import urlparse, urljoin
 from bs4 import BeautifulSoup
 
+base_dir = '/home/sda/AI-WORK/scrapping/data'
+not_essantial_external = ['wa.me','facebook.com', 'www.facebook.com','instagram.com','vk.com']
 
 int_url = set()
 ext_url = set()
 
+def prepare_content(text):
+    # на входе - содержимое html файла, на выходе - готовую пхп-шку
+    #
+    #
+    return text
 
-
-not_essantial_external = ['wa.me','facebook.com', 'www.facebook.com','instagram.com','vk.com']
 
 def valid_url(url):
     parsed = urlparse(url)
@@ -29,9 +34,12 @@ def website_links(url):
     file_path = url_parsed.path
     domain_name = url_parsed.netloc
 
-    base_dir = '/home/sda/AI-WORK/scrapping/data'
+    if file_path.startswith('/'):
+        file_path = file_path[1:]
+
     dir_name = os.path.join(base_dir, file_path)
-    print(dir_name)
+    print('base:', base_dir, 'fp:', file_path,  'dirname:', dir_name)
+
     if not os.path.exists(dir_name):
         print('path:', dir_name)
         os.makedirs(dir_name)
@@ -39,8 +47,7 @@ def website_links(url):
     content = requests.get(url)
 
     with open(os.path.join(base_dir, file_path, 'index.php'), 'w+') as fp:
-        print('file:', os.path.join(base_dir, file_path, 'index.php'))
-        fp.write(content.text)
+        fp.write(prepare_content(content.text))
 
     soup = BeautifulSoup(content.text, "html.parser")
 
